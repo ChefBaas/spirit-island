@@ -432,6 +432,46 @@
     }
     footer a { color: var(--gold); }
 
+    /* ── Spirit Spotlight ─────────────────────────────────────────── */
+    .spirit-spotlight {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 4rem;
+    }
+    .spirit-panel {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      aspect-ratio: 2/3;
+      transition: transform 0.35s, border-color 0.3s, box-shadow 0.35s;
+      cursor: default;
+    }
+    .spirit-panel:hover {
+      transform: translateY(-8px) scale(1.03);
+      border-color: var(--gold);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    }
+    .spirit-panel img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top;
+      display: block;
+    }
+    .spirit-panel-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2.5rem 0.65rem 0.65rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.88));
+    }
+    .spirit-panel-overlay .spirit-name {
+      font-size: 0.75rem; color: #fff; line-height: 1.3;
+      margin-bottom: 0.2rem;
+    }
+    .spirit-panel-overlay .spirit-complexity {
+      font-size: 0.6rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
     /* ── Responsive ──────────────────────────────────────────────── */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.25rem; }
@@ -504,11 +544,7 @@
           <p style="font-size:0.72rem; color:var(--subtext); margin-top:0.6rem;">*Three consecutive years through 2024</p>
         </div>
         <div class="about-image">
-          <!-- Replace src with a local image or one you own for the best experience -->
-          <div class="gallery-placeholder">
-            <span>🏝️</span>
-            Spirit Island Board Setup
-          </div>
+          <img src="https://spiritislandwiki.com/images/f/f5/Spirit_Island_box.png" alt="Spirit Island box art" />
         </div>
       </div>
     </div>
@@ -579,6 +615,81 @@
           No two play alike.
         </p>
       </div>
+      <!-- Spirit panel art spotlight -->
+      <div class="spirit-spotlight">
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/c/c2/Lightning%27s_Swift_Strike.png/400px-Lightning%27s_Swift_Strike.png" alt="Lightning's Swift Strike" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Lightning's Swift Strike</div>
+            <div class="spirit-complexity complexity-low">Low</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/f/ff/River_Surges_in_Sunlight.png/400px-River_Surges_in_Sunlight.png" alt="River Surges in Sunlight" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">River Surges in Sunlight</div>
+            <div class="spirit-complexity complexity-low">Low</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/d/d2/Shadows_Flicker_Like_Flame.png/400px-Shadows_Flicker_Like_Flame.png" alt="Shadows Flicker Like Flame" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Shadows Flicker Like Flame</div>
+            <div class="spirit-complexity complexity-low">Low</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/c/c2/Vital_Strength_of_the_Earth.png/400px-Vital_Strength_of_the_Earth.png" alt="Vital Strength of the Earth" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Vital Strength of the Earth</div>
+            <div class="spirit-complexity complexity-low">Low</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/7/7f/A_Spread_of_Rampant_Green.png/400px-A_Spread_of_Rampant_Green.png" alt="A Spread of Rampant Green" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">A Spread of Rampant Green</div>
+            <div class="spirit-complexity complexity-mod">Moderate</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/b/bd/Thunderspeaker.png/400px-Thunderspeaker.png" alt="Thunderspeaker" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Thunderspeaker</div>
+            <div class="spirit-complexity complexity-mod">Moderate</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/d/d8/Ocean%27s_Hungry_Grasp.png/400px-Ocean%27s_Hungry_Grasp.png" alt="Ocean's Hungry Grasp" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Ocean's Hungry Grasp</div>
+            <div class="spirit-complexity complexity-high">High</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/a/ae/Keeper_of_the_Forbidden_Wilds.png/400px-Keeper_of_the_Forbidden_Wilds.png" alt="Keeper of the Forbidden Wilds" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Keeper of the Forbidden Wilds</div>
+            <div class="spirit-complexity complexity-mod">Moderate</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/2/21/Heart_of_the_Wildfire.png/400px-Heart_of_the_Wildfire.png" alt="Heart of the Wildfire" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Heart of the Wildfire</div>
+            <div class="spirit-complexity complexity-high">High</div>
+          </div>
+        </div>
+        <div class="spirit-panel">
+          <img src="https://spiritislandwiki.com/images/thumb/3/33/Volcano_Looming_High.png/400px-Volcano_Looming_High.png" alt="Volcano Looming High" />
+          <div class="spirit-panel-overlay">
+            <div class="spirit-name">Volcano Looming High</div>
+            <div class="spirit-complexity complexity-mod">Moderate</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-label" style="margin-bottom:1.5rem;">Full Roster</p>
       <div class="spirits-grid">
         <!-- Base Game -->
         <div class="spirit-card"><div class="spirit-name">Lightning's Swift Strike</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Base Game</div></div>
@@ -634,24 +745,23 @@
       <h2 class="section-title">The Island in All Its Glory</h2>
       <div class="divider"></div>
       <p class="section-body">
-        Add your own photos here — from your game nights, your painted minis, or shots of the
-        spectacular artwork. The tiles below are ready for your images.
+        Five spirits, five forces of nature. Each panel tells a story of ancient power.
       </p>
       <div class="gallery-grid">
         <div class="gallery-item">
-          <div class="gallery-placeholder"><span>🌊</span>Ocean's Hungry Grasp</div>
+          <img src="https://spiritislandwiki.com/images/thumb/d/d8/Ocean%27s_Hungry_Grasp.png/400px-Ocean%27s_Hungry_Grasp.png" alt="Ocean's Hungry Grasp" style="object-position:top;" />
         </div>
         <div class="gallery-item">
-          <div class="gallery-placeholder"><span>⚡</span>Lightning's Swift Strike</div>
+          <img src="https://spiritislandwiki.com/images/thumb/c/c2/Lightning%27s_Swift_Strike.png/400px-Lightning%27s_Swift_Strike.png" alt="Lightning's Swift Strike" style="object-position:top;" />
         </div>
         <div class="gallery-item">
-          <div class="gallery-placeholder"><span>🌱</span>Spread of Rampant Green</div>
+          <img src="https://spiritislandwiki.com/images/thumb/7/7f/A_Spread_of_Rampant_Green.png/400px-A_Spread_of_Rampant_Green.png" alt="A Spread of Rampant Green" style="object-position:top;" />
         </div>
         <div class="gallery-item">
-          <div class="gallery-placeholder"><span>🔥</span>Heart of the Wildfire</div>
+          <img src="https://spiritislandwiki.com/images/thumb/2/21/Heart_of_the_Wildfire.png/400px-Heart_of_the_Wildfire.png" alt="Heart of the Wildfire" style="object-position:top;" />
         </div>
         <div class="gallery-item">
-          <div class="gallery-placeholder"><span>🌑</span>Shadows Flicker Like Flame</div>
+          <img src="https://spiritislandwiki.com/images/thumb/d/d2/Shadows_Flicker_Like_Flame.png/400px-Shadows_Flicker_Like_Flame.png" alt="Shadows Flicker Like Flame" style="object-position:top;" />
         </div>
       </div>
     </div>

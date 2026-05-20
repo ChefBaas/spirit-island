@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spirit Island — The Greatest Board Game Ever Made</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green:   #2d6a4f;
+      --green2:  #1b4332;
+      --teal:    #40916c;
+      --gold:    #d4a017;
+      --gold2:   #f4c542;
+      --fire:    #c0392b;
+      --dark:    #0d1117;
+      --dark2:   #161b22;
+      --mist:    #e8f4f8;
+      --text:    #e2e8f0;
+      --subtext: #94a3b8;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ──────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+    }
+    .nav-logo {
+      font-size: 1.1rem; font-weight: bold;
+      letter-spacing: 0.05em; color: var(--gold);
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--subtext);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── Hero ─────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      background:
+        linear-gradient(to bottom, rgba(13,17,23,0.45) 0%, rgba(13,17,23,0.8) 70%, var(--dark) 100%),
+        url('https://cf.geekdo-images.com/itemrep/img/7Lhk_iaBIZjtYHtjKlFEW_nyM_c=/fit-in/246x300/pic3615853.jpg') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Animated spirit-glow orbs in background */
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 60%, rgba(45,106,79,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 35% at 80% 30%, rgba(192,57,43,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 80%, rgba(212,160,23,0.2) 0%, transparent 70%);
+      animation: glow 8s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      0%   { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 1;   transform: scale(1.05); }
+    }
+    .hero-eyebrow {
+      position: relative;
+      font-size: 0.85rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      position: relative;
+      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      line-height: 1; font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 60px rgba(212,160,23,0.4), 0 4px 20px rgba(0,0,0,0.8);
+      margin-bottom: 1.5rem;
+    }
+    .hero-title span { color: var(--gold2); }
+    .hero-sub {
+      position: relative;
+      max-width: 600px;
+      font-size: 1.2rem; line-height: 1.7;
+      color: rgba(226,232,240,0.85);
+      margin-bottom: 2.5rem;
+    }
+    .hero-cta {
+      position: relative;
+      display: inline-block;
+      padding: 0.9rem 2.4rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: var(--dark);
+      font-weight: bold; font-size: 0.9rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(212,160,23,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212,160,23,0.6);
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      color: var(--subtext); font-size: 0.75rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── Shared section styles ────────────────────────────────────── */
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15; margin-bottom: 1.25rem;
+      color: #fff;
+    }
+    .section-body {
+      font-size: 1.05rem; line-height: 1.8;
+      color: rgba(226,232,240,0.8);
+      max-width: 700px;
+    }
+    .divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 1.5rem 0;
+    }
+
+    /* ── What is Spirit Island ────────────────────────────────────── */
+    #about { background: var(--dark2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+    .about-image {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border: 1px solid rgba(212,160,23,0.2);
+      aspect-ratio: 4/3;
+      background:
+        linear-gradient(135deg, var(--green2) 0%, var(--dark) 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .about-image img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .stat-row {
+      display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(212,160,23,0.15);
+      border-radius: 6px;
+      flex: 1; min-width: 100px;
+    }
+    .stat-num {
+      font-size: 2rem; font-weight: bold;
+      color: var(--gold2); line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem; color: var(--subtext);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* ── Why it's the best ───────────────────────────────────────── */
+    #why { background: var(--dark); }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .pillar {
+      padding: 2rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .pillar:hover {
+      border-color: rgba(212,160,23,0.4);
+      transform: translateY(-4px);
+    }
+    .pillar-icon {
+      font-size: 2.2rem; margin-bottom: 1rem;
+      display: block;
+    }
+    .pillar h3 {
+      font-size: 1.15rem; color: var(--gold2);
+      margin-bottom: 0.75rem;
+    }
+    .pillar p {
+      font-size: 0.95rem; color: var(--subtext);
+      line-height: 1.7;
+    }
+
+    /* ── The Spirits ─────────────────────────────────────────────── */
+    #spirits {
+      background: linear-gradient(180deg, var(--dark2) 0%, var(--green2) 50%, var(--dark2) 100%);
+    }
+    .spirits-intro { max-width: 700px; margin-bottom: 3rem; }
+    .spirits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .spirit-card {
+      padding: 1.25rem 1rem;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      text-align: center;
+      transition: border-color 0.3s, background 0.3s;
+      cursor: default;
+    }
+    .spirit-card:hover {
+      border-color: var(--gold);
+      background: rgba(212,160,23,0.07);
+    }
+    .spirit-card .spirit-name {
+      font-size: 0.9rem; color: #fff;
+      line-height: 1.35; margin-bottom: 0.4rem;
+    }
+    .spirit-card .spirit-complexity {
+      font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .complexity-low    { color: #4ade80; }
+    .complexity-mod    { color: #fbbf24; }
+    .complexity-high   { color: #f97316; }
+    .complexity-vhigh  { color: #ef4444; }
+    .spirit-source {
+      font-size: 0.65rem; color: var(--subtext);
+      margin-top: 0.25rem;
+    }
+
+    /* ── Gallery ─────────────────────────────────────────────────── */
+    #gallery { background: var(--dark); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 0.75rem;
+      margin-top: 3rem;
+    }
+    .gallery-item {
+      overflow: hidden; border-radius: 6px;
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .gallery-item:nth-child(1) { grid-column: span 7; }
+    .gallery-item:nth-child(2) { grid-column: span 5; }
+    .gallery-item:nth-child(3) { grid-column: span 4; }
+    .gallery-item:nth-child(4) { grid-column: span 4; }
+    .gallery-item:nth-child(5) { grid-column: span 4; }
+    .gallery-item img {
+      width: 100%; height: 100%; min-height: 220px;
+      object-fit: cover; display: block;
+      transition: transform 0.5s;
+    }
+    .gallery-item:hover img { transform: scale(1.04); }
+
+    /* Placeholder tiles for when images are missing */
+    .gallery-placeholder {
+      width: 100%; min-height: 220px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--green2), var(--dark));
+      color: var(--subtext); font-size: 0.8rem;
+    }
+    .gallery-placeholder span { font-size: 2rem; }
+
+    /* ── Expansions ──────────────────────────────────────────────── */
+    #expansions { background: var(--dark2); }
+    .expansion-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .expansion-card {
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .expansion-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212,160,23,0.4);
+    }
+    .expansion-header {
+      padding: 1.5rem;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #fff;
+    }
+    .expansion-body {
+      padding: 0 1.5rem 1.5rem;
+      font-size: 0.9rem; color: var(--subtext);
+      line-height: 1.6;
+    }
+    .expansion-tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      margin-bottom: 0.75rem;
+    }
+    .exp-bc  { background: #1a3325; color: #4ade80; }
+    .exp-je  { background: #2d1a00; color: #fbbf24; }
+    .exp-ff  { background: #2d1a1a; color: #f87171; }
+    .exp-ni  { background: #1a1a2d; color: #a78bfa; }
+
+    .expansion-header.bc { background: linear-gradient(135deg, #1b4332, #2d6a4f); }
+    .expansion-header.je { background: linear-gradient(135deg, #92400e, #b45309); }
+    .expansion-header.ff { background: linear-gradient(135deg, #7f1d1d, #991b1b); }
+    .expansion-header.ni { background: linear-gradient(135deg, #1e1b4b, #3730a3); }
+
+    /* ── Awards ──────────────────────────────────────────────────── */
+    #awards {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--green2) 100%);
+      text-align: center;
+    }
+    .awards-grid {
+      display: flex; flex-wrap: wrap;
+      gap: 1.5rem; justify-content: center;
+      margin-top: 3rem;
+    }
+    .award-badge {
+      padding: 1.5rem 2rem;
+      background: rgba(212,160,23,0.08);
+      border: 1px solid rgba(212,160,23,0.3);
+      border-radius: 8px;
+      max-width: 260px;
+    }
+    .award-badge .trophy { font-size: 2rem; margin-bottom: 0.5rem; }
+    .award-badge h4 { color: var(--gold2); margin-bottom: 0.4rem; }
+    .award-badge p { font-size: 0.85rem; color: var(--subtext); line-height: 1.5; }
+
+    /* ── Quote / pull ────────────────────────────────────────────── */
+    #quote {
+      background: var(--dark2);
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+    blockquote {
+      max-width: 800px; margin: 0 auto;
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-style: italic;
+      color: #fff;
+      line-height: 1.55;
+    }
+    blockquote::before { content: '\201C'; color: var(--gold); font-size: 4rem; line-height: 0; vertical-align: -1rem; margin-right: 0.2em; }
+    blockquote::after  { content: '\201D'; color: var(--gold); font-size: 4rem; line-height: 0; vertical-align: -1rem; margin-left:  0.2em; }
+    .quote-source { margin-top: 1.5rem; color: var(--subtext); font-size: 0.85rem; }
+
+    /* ── CTA / Get the game ──────────────────────────────────────── */
+    #cta {
+      background: linear-gradient(135deg, var(--green2) 0%, var(--dark) 60%);
+      text-align: center;
+      padding: 7rem 2rem;
+    }
+    #cta .section-title { font-size: clamp(2.2rem, 5vw, 3.5rem); }
+    #cta .section-body { margin: 0 auto 2.5rem; text-align: center; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: var(--dark);
+      font-weight: bold; font-size: 0.9rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(212,160,23,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,160,23,0.55); }
+    .btn-secondary {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      border: 1px solid rgba(212,160,23,0.5);
+      color: var(--gold2);
+      font-weight: bold; font-size: 0.9rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 4px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(212,160,23,0.1); border-color: var(--gold); }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8rem; color: var(--subtext);
+    }
+    footer a { color: var(--gold); }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:nth-child(n) { grid-column: span 1; }
+      .gallery-item:nth-child(1) { grid-column: span 2; }
+    }
+    @media (max-width: 500px) {
+      .nav-links { display: none; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:nth-child(n) { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-logo">Spirit Island</div>
+    <ul class="nav-links">
+      <li><a href="#about">The Game</a></li>
+      <li><a href="#why">Why It's the Best</a></li>
+      <li><a href="#spirits">The Spirits</a></li>
+      <li><a href="#expansions">Expansions</a></li>
+      <li><a href="#cta">Get It</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <section id="hero">
+    <p class="hero-eyebrow">A love letter to the greatest board game ever made</p>
+    <h1 class="hero-title">Spirit<br><span>Island</span></h1>
+    <p class="hero-sub">
+      You are not the hero arriving to save the day. You <em>are</em> the island —
+      ancient, mighty, and furious. Drive the colonizers back into the sea.
+    </p>
+    <a href="#about" class="hero-cta">Discover the Island</a>
+    <div class="scroll-hint">↓ scroll</div>
+  </section>
+
+  <!-- ── What is Spirit Island ──────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <p class="section-label">What is Spirit Island?</p>
+          <h2 class="section-title">A Co-op Strategy Game Like No Other</h2>
+          <div class="divider"></div>
+          <p class="section-body">
+            Designed by R. Eric Reuss and published by Greater Than Games in 2017,
+            Spirit Island is a deeply strategic co-operative board game for 1–4 players
+            (up to 6 with expansions). You and your fellow players each control a unique,
+            elemental Spirit of the land, wielding ancient powers to drive colonizing
+            Invaders off your island home before they blight it beyond saving.
+          </p>
+          <br>
+          <p class="section-body">
+            Unlike almost every other adventure game, <strong>you are not the underdog</strong>.
+            You are terrifying forces of nature — lightning, ocean, fire, shadow — and the
+            Invaders are very, very afraid. Or they should be.
+          </p>
+          <div class="stat-row">
+            <div class="stat"><div class="stat-num">1–4</div><div class="stat-label">Players</div></div>
+            <div class="stat"><div class="stat-num">90–120</div><div class="stat-label">Minutes</div></div>
+            <div class="stat"><div class="stat-num">37+</div><div class="stat-label">Unique Spirits</div></div>
+            <div class="stat"><div class="stat-num">#1</div><div class="stat-label">Solo on BGG*</div></div>
+          </div>
+          <p style="font-size:0.72rem; color:var(--subtext); margin-top:0.6rem;">*Three consecutive years through 2024</p>
+        </div>
+        <div class="about-image">
+          <!-- Replace src with a local image or one you own for the best experience -->
+          <div class="gallery-placeholder">
+            <span>🏝️</span>
+            Spirit Island Board Setup
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Why it's the best ──────────────────────────────────────── -->
+  <section id="why">
+    <div class="container">
+      <p class="section-label">Why it's the best</p>
+      <h2 class="section-title">What Makes Spirit Island<br>Truly Special</h2>
+      <div class="divider"></div>
+
+      <div class="pillars">
+        <div class="pillar">
+          <span class="pillar-icon">🌪️</span>
+          <h3>Radical Asymmetry</h3>
+          <p>Every Spirit plays completely differently. Lightning is fast and reckless. Earth is slow and unyielding. Ocean drowns anything that touches the shore. Mastering even one Spirit feels like learning a whole new game.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">🤝</span>
+          <h3>True Co-operation</h3>
+          <p>No one is a passive passenger. Spirits synergize in surprising ways — your powers can power up your allies, call them across the board, or set up devastating combos. Winning together feels genuinely earned.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">🔄</span>
+          <h3>Infinite Replayability</h3>
+          <p>Different Spirits, different island layouts, different Invader factions, and multiple difficulty settings mean every game tells a new story. With expansions, you will never run out of things to try.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">📈</span>
+          <h3>A Game That Grows with You</h3>
+          <p>Brand new? Pick Lightning or River. Seasoned veteran? Try Fractured Days Split the Sky or Starlight Seeks Its Form. The difficulty dial spans casual afternoon to mind-bending puzzle.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">🌍</span>
+          <h3>A Flipped Narrative</h3>
+          <p>Hailed by The Atlantic as one of the few genuinely anti-colonial board games, Spirit Island reframes the classic "explore and conquer" genre entirely. The Invaders are the threat. The land fights back.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">🎨</span>
+          <h3>Stunning Production</h3>
+          <p>Gorgeous art, chunky tokens, detailed spirit boards, and a sprawling island map make every session a feast for the eyes. Each Spirit card is a small piece of illustrated mythology.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pull quote ──────────────────────────────────────────────── -->
+  <section id="quote">
+    <div class="container">
+      <blockquote>
+        Spirit Island is complex and deep… an easy recommendation for anyone who can handle the learning curve.
+      </blockquote>
+      <p class="quote-source">— Ars Technica</p>
+    </div>
+  </section>
+
+  <!-- ── The Spirits ────────────────────────────────────────────── -->
+  <section id="spirits">
+    <div class="container">
+      <div class="spirits-intro">
+        <p class="section-label">Meet the Spirits</p>
+        <h2 class="section-title">37 Unique Spirits of the Land</h2>
+        <div class="divider"></div>
+        <p class="section-body">
+          From gentle river flows to screaming wildfires, from patient earth to the devouring ocean —
+          each Spirit is a force of nature with its own playstyle, special powers, and growth path.
+          No two play alike.
+        </p>
+      </div>
+      <div class="spirits-grid">
+        <!-- Base Game -->
+        <div class="spirit-card"><div class="spirit-name">Lightning's Swift Strike</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">River Surges in Sunlight</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">Shadows Flicker Like Flame</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">Vital Strength of the Earth</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">A Spread of Rampant Green</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">Thunderspeaker</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">Bringer of Dreams and Nightmares</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Base Game</div></div>
+        <div class="spirit-card"><div class="spirit-name">Ocean's Hungry Grasp</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Base Game</div></div>
+        <!-- Branch & Claw -->
+        <div class="spirit-card"><div class="spirit-name">Keeper of the Forbidden Wilds</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Branch &amp; Claw</div></div>
+        <div class="spirit-card"><div class="spirit-name">Sharp Fangs Behind the Leaves</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Branch &amp; Claw</div></div>
+        <!-- Jagged Earth -->
+        <div class="spirit-card"><div class="spirit-name">Grinning Trickster Stirs Up Trouble</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Lure of the Deep Wilderness</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Many Minds Move as One</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Shifting Memory of Ages</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Stone's Unyielding Defiance</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Volcano Looming High</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Shroud of Silent Mist</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Vengeance as a Burning Plague</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Fractured Days Split the Sky</div><div class="spirit-complexity complexity-vhigh">Very High</div><div class="spirit-source">Jagged Earth</div></div>
+        <div class="spirit-card"><div class="spirit-name">Starlight Seeks Its Form</div><div class="spirit-complexity complexity-vhigh">Very High</div><div class="spirit-source">Jagged Earth</div></div>
+        <!-- Feather & Flame -->
+        <div class="spirit-card"><div class="spirit-name">Heart of the Wildfire</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Feather &amp; Flame</div></div>
+        <div class="spirit-card"><div class="spirit-name">Serpent Slumbering Beneath the Island</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Feather &amp; Flame</div></div>
+        <div class="spirit-card"><div class="spirit-name">Downpour Drenches the World</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Feather &amp; Flame</div></div>
+        <div class="spirit-card"><div class="spirit-name">Finder of Paths Unseen</div><div class="spirit-complexity complexity-vhigh">Very High</div><div class="spirit-source">Feather &amp; Flame</div></div>
+        <!-- Horizons -->
+        <div class="spirit-card"><div class="spirit-name">Devouring Teeth Lurk Underfoot</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Horizons</div></div>
+        <div class="spirit-card"><div class="spirit-name">Eyes Watch from the Trees</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Horizons</div></div>
+        <div class="spirit-card"><div class="spirit-name">Fathomless Mud of the Swamp</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Horizons</div></div>
+        <div class="spirit-card"><div class="spirit-name">Rising Heat of Stone and Sand</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Horizons</div></div>
+        <div class="spirit-card"><div class="spirit-name">Sun-Bright Whirlwind</div><div class="spirit-complexity complexity-low">Low Complexity</div><div class="spirit-source">Horizons</div></div>
+        <!-- Nature Incarnate -->
+        <div class="spirit-card"><div class="spirit-name">Ember-Eyed Behemoth</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Hearth-Vigil</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Towering Roots of the Jungle</div><div class="spirit-complexity complexity-mod">Moderate</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Breath of Darkness Down Your Spine</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Relentless Gaze of the Sun</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Wandering Voice Keens Delirium</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Wounded Waters Bleeding</div><div class="spirit-complexity complexity-high">High Complexity</div><div class="spirit-source">Nature Incarnate</div></div>
+        <div class="spirit-card"><div class="spirit-name">Dances Up Earthquakes</div><div class="spirit-complexity complexity-vhigh">Very High</div><div class="spirit-source">Nature Incarnate</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Gallery ────────────────────────────────────────────────── -->
+  <section id="gallery">
+    <div class="container">
+      <p class="section-label">Gallery</p>
+      <h2 class="section-title">The Island in All Its Glory</h2>
+      <div class="divider"></div>
+      <p class="section-body">
+        Add your own photos here — from your game nights, your painted minis, or shots of the
+        spectacular artwork. The tiles below are ready for your images.
+      </p>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>🌊</span>Ocean's Hungry Grasp</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>⚡</span>Lightning's Swift Strike</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>🌱</span>Spread of Rampant Green</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>🔥</span>Heart of the Wildfire</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder"><span>🌑</span>Shadows Flicker Like Flame</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Expansions ─────────────────────────────────────────────── -->
+  <section id="expansions">
+    <div class="container">
+      <p class="section-label">The Full Universe</p>
+      <h2 class="section-title">Four Expansions, Endless Depth</h2>
+      <div class="divider"></div>
+      <p class="section-body">
+        Each expansion adds new Spirits, new mechanics, and new ways for the island to fight back.
+        The base game alone is a complete experience — but once you're hooked, the rabbit hole goes deep.
+      </p>
+      <div class="expansion-list">
+        <div class="expansion-card">
+          <div class="expansion-header bc">Branch &amp; Claw</div>
+          <div class="expansion-body">
+            <div class="expansion-tag exp-bc">Wild Growth</div>
+            <p>Adds 2 new Spirits, Event cards that make the island feel alive, and new Invader cards. The island itself begins to act — unpredictably.</p>
+          </div>
+        </div>
+        <div class="expansion-card">
+          <div class="expansion-header je">Jagged Earth</div>
+          <div class="expansion-body">
+            <div class="expansion-tag exp-je">The Big One</div>
+            <p>The flagship expansion. 10 new Spirits, new Adversaries, Scenarios, and the Badlands terrain. Doubles the game's total content. Essential.</p>
+          </div>
+        </div>
+        <div class="expansion-card">
+          <div class="expansion-header ff">Feather &amp; Flame</div>
+          <div class="expansion-body">
+            <div class="expansion-tag exp-ff">Fire &amp; Shadow</div>
+            <p>4 new Spirits with unique mechanics including the terrifying Heart of the Wildfire and the colossal Serpent Slumbering Beneath the Island.</p>
+          </div>
+        </div>
+        <div class="expansion-card">
+          <div class="expansion-header ni">Nature Incarnate</div>
+          <div class="expansion-body">
+            <div class="expansion-tag exp-ni">Godlike Power</div>
+            <p>8 new Spirits of immense power and complexity. Adds Aspect cards that let you reshape any Spirit's identity. Released 2023.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Awards ─────────────────────────────────────────────────── -->
+  <section id="awards">
+    <div class="container">
+      <p class="section-label">Recognition</p>
+      <h2 class="section-title">The Numbers Don't Lie</h2>
+      <div class="divider" style="margin: 1.5rem auto;"></div>
+      <div class="awards-grid">
+        <div class="award-badge">
+          <div class="trophy">🏆</div>
+          <h4>#1 Solo Game on BGG</h4>
+          <p>Ranked the best solo board game on BoardGameGeek for three consecutive years through 2024.</p>
+        </div>
+        <div class="award-badge">
+          <div class="trophy">⭐</div>
+          <h4>Top 10 All-Time on BGG</h4>
+          <p>Sits in the top 10 of BGG's all-time highest rated games list — one of the greatest achievements in modern board gaming.</p>
+        </div>
+        <div class="award-badge">
+          <div class="trophy">📰</div>
+          <h4>Praised by Critics</h4>
+          <p>Ars Technica calls it "an easy recommendation." The Atlantic spotlights its anti-colonial narrative as groundbreaking.</p>
+        </div>
+        <div class="award-badge">
+          <div class="trophy">📱</div>
+          <h4>Award-Winning Digital Port</h4>
+          <p>Available on PC, iOS, and Android. The digital version faithfully captures the full depth of the physical game.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────── -->
+  <section id="cta">
+    <div class="container">
+      <p class="section-label">Ready to defend the island?</p>
+      <h2 class="section-title">The Island Needs Its Spirits</h2>
+      <div class="divider" style="margin: 1.5rem auto;"></div>
+      <p class="section-body">
+        Spirit Island is the most rewarding co-operative board game ever designed. Whether you're
+        a solo strategist or playing with friends, there is nothing else like it on your shelf.
+        Pick it up. Learn one Spirit. Then another. You won't stop.
+      </p>
+      <br>
+      <div class="cta-buttons">
+        <a href="https://shop.greaterthangames.com/products/spirit-island" class="btn-primary" target="_blank" rel="noopener">Buy from Greater Than Games</a>
+        <a href="https://boardgamegeek.com/boardgame/162886/spirit-island" class="btn-secondary" target="_blank" rel="noopener">See it on BGG</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────── -->
+  <footer>
+    <p>
+      A fan-made tribute. Spirit Island is designed by R. Eric Reuss and published by
+      <a href="https://www.greaterthangames.com" target="_blank" rel="noopener">Greater Than Games</a>.
+      All game content, artwork, and trademarks belong to their respective owners.
+    </p>
+  </footer>
+
+</body>
+</html>
